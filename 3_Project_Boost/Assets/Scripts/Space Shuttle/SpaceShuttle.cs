@@ -13,6 +13,7 @@ public class SpaceShuttle : MonoBehaviour
     // Audio
     AudioSource audioSource;
     float defaultVolume;
+    const float MIN_VOLUME = 0.05f;
 
 
     // Start is called before the first frame update
@@ -31,7 +32,7 @@ public class SpaceShuttle : MonoBehaviour
     private void RemoveSoundArtifacts()
     {
         defaultVolume = audioSource.volume;
-        audioSource.volume = 0.001f;
+        audioSource.volume = MIN_VOLUME;
         audioSource.Play();
     }
 
@@ -44,6 +45,8 @@ public class SpaceShuttle : MonoBehaviour
 
     private void Rotate()
     {
+        rigidBody.freezeRotation = true; // take manual control
+
         if (Input.GetKey(KeyCode.A) && Input.GetKey(KeyCode.D))
         {
             // Disable rotation of both A and D are pressed
@@ -57,6 +60,8 @@ public class SpaceShuttle : MonoBehaviour
         {
             transform.Rotate(-Vector3.forward * Time.deltaTime * (int)FrameRate.FPS60);
         }
+
+        rigidBody.freezeRotation = false; // release control to physics
     }
 
     private void Thrust()
@@ -83,7 +88,7 @@ public class SpaceShuttle : MonoBehaviour
         }
         else if (Input.GetKeyUp(KeyCode.Space))
         {
-            audioSource.volume = 0.001f;
+            audioSource.volume = MIN_VOLUME;
         }
     }
 }
